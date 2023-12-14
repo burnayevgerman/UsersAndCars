@@ -19,12 +19,24 @@ public class User {
    @Column(name = "email")
    private String email;
 
+   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
+   private Car car;
+
    public User() {}
-   
+
    public User(String firstName, String lastName, String email) {
+      this(firstName, lastName, email, null);
+   }
+
+   public User(String firstName, String lastName, String email, Car car) {
       this.firstName = firstName;
       this.lastName = lastName;
       this.email = email;
+      this.car = car;
+
+      if (this.car != null) {
+         this.car.setUser(this);
+      }
    }
 
    public Long getId() {
@@ -57,5 +69,19 @@ public class User {
 
    public void setEmail(String email) {
       this.email = email;
+   }
+
+   public Car getCar() {
+      return car;
+   }
+
+   public void setCar(Car car) {
+      car.setUser(this);
+      this.car = car;
+   }
+
+   public void removeCar() {
+      car.setUser(null);
+      car = null;
    }
 }

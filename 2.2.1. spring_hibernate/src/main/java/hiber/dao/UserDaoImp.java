@@ -29,10 +29,10 @@ public class UserDaoImp implements UserDao {
 
    @Override
    public User findUserByCar(String model, int series) {
-      return ((Car) sessionFactory.getCurrentSession().createQuery(
-              "FROM Car WHERE model = :model AND series = :series")
+      return sessionFactory.getCurrentSession().createQuery(
+              "SELECT u FROM Car c JOIN c.user u WHERE c.model = :model AND c.series = :series", User.class)
               .setParameter("model", model)
               .setParameter("series", series)
-              .stream().findAny().orElse(null)).getUser();
+              .stream().findAny().orElse(null);
    }
 }
